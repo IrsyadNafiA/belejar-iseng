@@ -11,7 +11,12 @@ import { createProductValidationSchema } from "../utils/validationSchemas.mjs";
 const router = Router();
 
 router.get("/api/products", (req, res) => {
-  res.send(mockProducts).status(200);
+  console.log(req.headers.cookie);
+  console.log(req.cookies);
+  console.log(req.signedCookies.test);
+  if (req.signedCookies.test && req.signedCookies.test === "test")
+    return res.send(mockProducts).status(200);
+  return res.send({ message: "Unauthorized" }).status(401);
 });
 
 router.get("/api/products/:id", (req, res) => {
