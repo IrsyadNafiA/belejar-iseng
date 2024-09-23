@@ -16,8 +16,16 @@ import { resolveIndexByUserId } from "../utils/middlewares.mjs";
 const router = Router();
 
 router.get("/api/users", checkSchema(getUserValidationSchema), (req, res) => {
+  console.log(req.session.id);
+  req.sessionStore.get(req.session.id, (err, sessionData) => {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+    console.log(sessionData);
+  });
   const result = validationResult(req);
-  console.log(result);
+  // console.log(result);
   const {
     query: { filter, value },
   } = req;
@@ -39,7 +47,6 @@ router.post(
   (req, res) => {
     const result = validationResult(req);
     console.log(result);
-
     if (!result.isEmpty())
       return res.status(400).send({ errors: result.array() });
 

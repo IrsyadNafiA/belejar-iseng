@@ -1,6 +1,16 @@
 export const mockUsers = [
-  { id: 1, name: "Irsyad Nafi", username: "irsyadnafi" },
-  { id: 2, name: "Alif Perdana 2", username: "alifperdana2" },
+  {
+    id: 1,
+    name: "Irsyad Nafi",
+    username: "irsyadnafi",
+    password: "testing123",
+  },
+  {
+    id: 2,
+    name: "Alif Perdana 2",
+    username: "alifperdana2",
+    password: "testing123",
+  },
 ];
 
 export const mockProducts = [
