@@ -22,6 +22,14 @@ export const createUserValidationSchema = {
       errorMessage: "Name must be a string",
     },
   },
+  password: {
+    notEmpty: {
+      errorMessage: "Password must be not empty",
+    },
+    isString: {
+      errorMessage: "Password must be a string",
+    },
+  },
 };
 
 export const getUserValidationSchema = {
@@ -51,12 +59,12 @@ export const createProductValidationSchema = {
       errorMessage: "Name must be a string",
     },
   },
-  harga: {
+  price: {
     notEmpty: {
-      errorMessage: "Harga must be not empty",
+      errorMessage: "Price must be not empty",
     },
     isInt: {
-      errorMessage: "Harga must be an integer",
+      errorMessage: "Price must be an integer",
     },
   },
 };
