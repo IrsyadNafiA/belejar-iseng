@@ -63,8 +63,13 @@ export const createProductValidationSchema = {
     notEmpty: {
       errorMessage: "Price must be not empty",
     },
-    isInt: {
-      errorMessage: "Price must be an integer",
+  },
+  type: {
+    notEmpty: {
+      errorMessage: "Type must be not empty",
+    },
+    isString: {
+      errorMessage: "Type must be a string",
     },
   },
 };

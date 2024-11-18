@@ -7,6 +7,7 @@ import {
   matchedData,
 } from "express-validator";
 import { createProductValidationSchema } from "../utils/validationSchemas.mjs";
+import { Product } from "../mongoose/schemas/product.mjs";
 
 const router = Router();
 
@@ -29,17 +30,18 @@ router.get("/api/products/:id", (request, response) => {
 router.post(
   "/api/products",
   checkSchema(createProductValidationSchema),
-  (request, response) => {
+  async (request, response) => {
     const result = validationResult(request); //result akan true jika tidak ada data yg error
-    if (!result.isEmpty())
-      return response.status(400).send({ errors: result.array() });
+    if (!result.isEmpty()) return response.status(400).send(result.array());
     const data = matchedData(request);
-    const newProduct = {
-      id: mockProducts[mockProducts.length - 1].id + 1,
-      ...data,
-    };
-    mockProducts.push(newProduct);
-    return response.status(201).send(newProduct);
+    const newProduct = new Product(data);
+    try {
+      const savedProduct = await newProduct.save();
+      return response.status(201).send(savedProduct);
+    } catch (err) {
+      console.log(err);
+      return response.sendStatus(400);
+    }
   }
 );
 

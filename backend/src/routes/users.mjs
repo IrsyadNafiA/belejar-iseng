@@ -17,7 +17,32 @@ import { hashPassword } from "../utils/helpers.mjs";
 
 const router = Router();
 
-router.get("/api/users", (req, res) => {});
+router.get(
+  "/api/users",
+  checkSchema(getUserValidationSchema),
+  (request, response) => {
+    console.log(request.session.id);
+    request.sessionStore.get(request.session.id, (err, sessionData) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      console.log("Inside session store");
+      console.log(sessionData);
+    });
+    const result = validationResult(request);
+    // console.log(result);
+    const {
+      query: { filter, value },
+    } = request;
+    if (!filter && !value) return response.send(mockUsers);
+    if (filter && value)
+      return response.send(
+        mockUsers.filter((user) => user[filter].includes(value))
+      );
+    return response.send(mockUsers);
+  }
+);
 
 router.post(
   "/api/users",
