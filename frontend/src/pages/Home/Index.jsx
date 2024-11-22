@@ -1,25 +1,27 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import BgKantin from "../../assets/images/kantin.jpg";
 import Carousel from "../../components/Carousel";
+import HomeSection from "../../components/Home/Section";
+import Faq from "../../components/Home/Faq";
+import { topKantinData } from "../../api/kantinApi";
 
 const Home = () => {
   const [kantin, setKantin] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fetch Data Kantin
+  const topKantin = useCallback(async () => {
+    const result = await topKantinData(apiUrl);
+    setKantin(result);
+  }, [apiUrl]);
+
   useEffect(() => {
-    const fetchKantin = async () => {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/photos?_limit=10"
-      );
-      const data = await response.json();
-      setKantin(data);
-    };
-    fetchKantin();
-  }, []);
+    topKantin();
+  }, [topKantin]);
 
   return (
-    <div className="bg-black">
+    <div className="bg-black pb-4">
       {/* Background Image */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center brightness-[0.25]"
@@ -39,14 +41,14 @@ const Home = () => {
           </h1>
         </div>
       </div>
-
       {/* Carousel Section */}
-      <div className="max-w-7xl mx-auto py-4 overflow-hidden">
-        <h3 className="text-2xl font-bold text-white mb-4">
-          List Kantin Sekarang
-        </h3>
+      <HomeSection title="Rekomendasi Kantin">
         <Carousel items={kantin} />
-      </div>
+      </HomeSection>
+      {/* FAQ Section */}
+      <HomeSection title="Tanya Jawab Umum">
+        <Faq />
+      </HomeSection>
     </div>
   );
 };
