@@ -1,21 +1,15 @@
 import passport from "passport";
+import { User } from "../model/users.mjs";
 import { Strategy } from "passport-local";
-import { mockUsers } from "../utils/constants.mjs";
-import { User } from "../mongoose/schemas/user.mjs";
-import { comparePassword } from "../utils/helpers.mjs";
+import { comparePassword } from "../helper/helpers.mjs";
 
 passport.serializeUser((user, done) => {
-  console.log(`Inside serialize user`);
-  console.log(user);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log(`Inside deserialize`);
-  console.log(`Deserializing id: ${id}`);
   try {
     const findUser = await User.findById(id);
-    if (!findUser) throw new Error("User not found");
     done(null, findUser);
   } catch (err) {
     done(err, null);
