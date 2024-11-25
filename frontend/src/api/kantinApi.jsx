@@ -7,6 +7,7 @@ const topKantinData = async (apiUrl) => {
       id: data.mal_id,
       name: data.title,
       image: data.images.jpg.image_url,
+      type: data.type,
     };
   });
   return result;
