@@ -8,7 +8,7 @@ import {
   getProducts,
   updateProduct,
 } from "../controller/product/product-controller.mjs";
-import { isAuthenticated } from "../middleware/isAuthenticated.mjs";
+import { isAuthenticated } from "../middleware/authMiddleware.mjs";
 
 const router = Router();
 

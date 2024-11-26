@@ -8,7 +8,10 @@ import {
   registerUser,
 } from "../controller/auth/auth-controller.mjs";
 import passport from "passport";
-import { isAuthenticated } from "../middleware/isAuthenticated.mjs";
+import {
+  authenticateUser,
+  isAuthenticated,
+} from "../middleware/authMiddleware.mjs";
 
 const router = Router();
 
@@ -17,7 +20,7 @@ router.post(
   checkSchema(createUserValidationSchema),
   registerUser
 );
-router.post("/api/login", passport.authenticate("local"), loginUser);
+router.post("/api/login", authenticateUser, loginUser);
 router.post("/api/logout", isAuthenticated, logoutUser);
 router.get("/api/cek-login", isAuthenticated, cekLogin);
 

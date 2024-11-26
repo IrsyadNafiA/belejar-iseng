@@ -19,19 +19,21 @@ const registerUser = async (request, response) => {
   }
 };
 
-const loginUser = async (request, response) => {
+const loginUser = async (req, res) => {
   try {
-    response.status(200).json({
+    res.status(200).json({
       message: "Login success",
       user: {
-        id: request.user.id,
-        username: request.user.username,
-        email: request.user.email,
-        role: request.user.role,
+        id: req.user.id,
+        username: req.user.username,
+        email: req.user.email,
+        role: req.user.role,
       },
     });
   } catch (err) {
-    res.status(401).json({ message: "Bad Credential", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
   }
 };
 
