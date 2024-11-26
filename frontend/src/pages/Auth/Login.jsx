@@ -26,7 +26,6 @@ const Login = () => {
           "Login Gagal!",
           error.response?.data?.message || "Terjadi kesalahan saat login."
         );
-        console.error("error login data: ", error);
       }
     }
   };
