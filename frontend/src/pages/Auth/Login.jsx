@@ -1,22 +1,14 @@
 import axios from "axios";
-import { useState } from "react";
+// import { useState } from "react";
+import { FormControlInput } from "../../components/Form/FormControl";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
-  const [formData, setFormData] = useState({});
-
-  const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setFormData((values) => ({ ...values, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.username || !formData.password) {
-      alert("Semua field harus diisi!");
-    } else {
+  const loginUser = async () => {
+    if (formik.isValid) {
       try {
-        await axios.post("http://localhost:3000/api/login", formData, {
+        await axios.post("http://localhost:3000/api/login", formik.values, {
           withCredentials: true,
         });
         alert("Login Berhasil");
@@ -27,41 +19,44 @@ const Login = () => {
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    onSubmit: loginUser,
+    validationSchema: Yup.object().shape({
+      username: Yup.string().required("Username harus diisi!"),
+      password: Yup.string().required("Password harus diisi!"),
+    }),
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    formik.setFieldValue(name, value);
+  };
+
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="w-full max-w-md p-4 bg-black">
         <h1 className="text-2xl font-bold text-white mb-4">Login</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-white font-bold mb-2"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 text-white rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-white font-bold mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 text-white rounded"
-            />
-          </div>
+        <form onSubmit={formik.handleSubmit}>
+          <FormControlInput
+            label="username"
+            type="text"
+            onChange={handleChange}
+          />
+          {formik.errors.username && formik.touched.username && (
+            <div className="text-red-500 mb-2">{formik.errors.username}</div>
+          )}
+          <FormControlInput
+            label="password"
+            type="password"
+            onChange={handleChange}
+          />
+          {formik.errors.password && formik.touched.password && (
+            <div className="text-red-500 mb-2">{formik.errors.password}</div>
+          )}
           <button
             type="submit"
             className="w-full p-2 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition duration-300 ease-in-out"
