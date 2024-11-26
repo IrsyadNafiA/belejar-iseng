@@ -3,6 +3,7 @@ import axios from "axios";
 import { FormControlInput } from "../../components/Form/FormControl";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import AlertComponent from "../../components/SweetAlert/AlertComponent";
 
 const Login = () => {
   const loginUser = async () => {
@@ -11,9 +12,20 @@ const Login = () => {
         await axios.post("http://localhost:3000/api/login", formik.values, {
           withCredentials: true,
         });
-        alert("Login Berhasil");
-        window.location.href = "/dashboard";
+        AlertComponent.success(
+          "Login Berhasil!",
+          "Anda akan diarahkan ke dashboard."
+        );
+        // Arahkan ke halaman dashboard setelah delay
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1500);
       } catch (error) {
+        // Tampilkan notifikasi error
+        AlertComponent.error(
+          "Login Gagal!",
+          error.response?.data?.message || "Terjadi kesalahan saat login."
+        );
         console.error("error login data: ", error);
       }
     }

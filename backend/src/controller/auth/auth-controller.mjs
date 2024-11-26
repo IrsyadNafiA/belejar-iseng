@@ -31,9 +31,7 @@ const loginUser = async (request, response) => {
       },
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Terjadi kesalahan", error: error.message });
+    res.status(401).json({ message: "Bad Credential", error: error.message });
   }
 };
 
