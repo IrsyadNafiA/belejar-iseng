@@ -1,5 +1,3 @@
-import PropTypes from "prop-types";
-
 const FormControlInput = (props) => {
   return (
     <div className="mb-4">
@@ -18,12 +16,6 @@ const FormControlInput = (props) => {
       />
     </div>
   );
-};
-
-FormControlInput.propTypes = {
-  label: PropTypes.string,
-  type: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 export { FormControlInput };
