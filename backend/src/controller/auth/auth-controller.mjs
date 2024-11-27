@@ -9,29 +9,37 @@ const registerUser = async (request, response) => {
 
   // create user
   const data = matchedData(request);
-  data.password = hashPassword(data.password);
-  const newUser = new User(data);
-  try {
-    const savedUser = await newUser.save();
-    return response.status(201).send(savedUser);
-  } catch (err) {
-    return response.status(400).send("Username already exists");
+  if (data.role === "default") {
+    return response
+      .status(400)
+      .json({ message: "Pilih role terlebih dahulu!" });
+  } else {
+    data.password = hashPassword(data.password);
+    const newUser = new User(data);
+    try {
+      const savedUser = await newUser.save();
+      return response.status(201).send(savedUser);
+    } catch (err) {
+      return response
+        .status(400)
+        .json({ message: "Username already exist", error: err.message });
+    }
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (request, response) => {
   try {
-    res.status(200).json({
+    response.status(200).json({
       message: "Login success",
       user: {
-        id: req.user.id,
-        username: req.user.username,
-        email: req.user.email,
-        role: req.user.role,
+        id: request.user.id,
+        username: request.user.username,
+        email: request.user.email,
+        role: request.user.role,
       },
     });
   } catch (err) {
-    res
+    response
       .status(500)
       .json({ message: "Internal Server Error", error: err.message });
   }

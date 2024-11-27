@@ -28,7 +28,7 @@ const isAuthenticated = (request, response, next) => {
   if (request.isAuthenticated()) {
     next();
   } else {
-    response.sendStatus(401);
+    response.status(401).json({ message: "Unauthorized", redirect: "/login" });
   }
 };
 

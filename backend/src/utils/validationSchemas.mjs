@@ -1,11 +1,13 @@
+import { matchedData } from "express-validator";
+
 export const createUserValidationSchema = {
   username: {
     isLength: {
       options: {
         min: 5,
-        max: 32,
+        max: 20,
       },
-      errorMessage: "Username must be between 5 and 32 characters",
+      errorMessage: "Username must be between 5 and 20 characters",
     },
     notEmpty: {
       errorMessage: "Username must be not empty",
@@ -23,11 +25,22 @@ export const createUserValidationSchema = {
     },
   },
   password: {
+    isLength: {
+      options: {
+        min: 8,
+        max: 32,
+      },
+      errorMessage: "Password must be between 8 and 32 characters",
+    },
     notEmpty: {
       errorMessage: "Password must be not empty",
     },
     isString: {
       errorMessage: "Password must be a string",
+    },
+    matches: {
+      options: /^(?=.*[A-Za-z])(?=.*[0-9]).*$/,
+      errorMessage: "Password must contain at least one letter and one number",
     },
   },
   role: {
