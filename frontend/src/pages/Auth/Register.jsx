@@ -1,100 +1,66 @@
 import axios from "axios";
-import { useState } from "react";
+import { FormControlInput } from "../../components/Form/FormControl";
+import { useFormik } from "formik";
+import { registerSchema } from "../../utils/validations/userValidation";
+import AlertComponent from "../../components/SweetAlert/AlertComponent";
 
 const Register = () => {
-  const [newData, setNewData] = useState({});
-
-  const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setNewData((values) => ({ ...values, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      !newData.username ||
-      !newData.displayName ||
-      !newData.password ||
-      !newData.role
-    ) {
-      alert("Semua field harus diisi!");
+  const registerUser = async () => {
+    if (formik.values.role === "default") {
+      alert("Pilih role terlebih dahulu!");
       return;
-    }
-    try {
-      await axios.post("http://localhost:3000/api/register", newData);
-      alert("Register Berhasil");
-      window.location.href = "/login";
-    } catch (error) {
-      console.error("error register data: ", error);
+    } else {
+      try {
+        await axios.post("http://localhost:3000/api/register", formik.values, {
+          withCredentials: true,
+        });
+        AlertComponent.success(
+          "Register Berhasil!",
+          "Anda akan diarahkan ke login."
+        );
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
+      } catch (error) {
+        AlertComponent.error(
+          "Register Gagal!",
+          error.response?.data?.message || "Terjadi kesalahan saat register."
+        );
+      }
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      displayName: "",
+      password: "",
+      role: "",
+    },
+    onSubmit: registerUser,
+    validationSchema: registerSchema,
+  });
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   formik.setFieldValue(name, value);
+  // };
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="w-full max-w-md p-4 bg-black">
         <h1 className="text-2xl font-bold text-white mb-4">Register</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-white font-bold mb-2"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 text-white rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="displayName"
-              className="block text-white font-bold mb-2"
-            >
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="displayName"
-              name="displayName"
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 text-white rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-white font-bold mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 text-white rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="role" className="block text-white font-bold mb-2">
-              Role
-            </label>
-            <select
-              name="role"
-              id="role"
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 text-white rounded"
-            >
-              <option>Select</option>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
+        <form onSubmit={formik.handleSubmit}>
+          <FormControlInput label="username" type="text" formik={formik} />
+          <FormControlInput label="displayName" type="text" formik={formik} />
+          <FormControlInput label="password" type="password" formik={formik} />
+          <FormControlInput
+            label="role"
+            type="select"
+            formik={formik}
+            options={["user", "admin"]}
+          />
           <button
             type="submit"
             className="w-full p-2 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition duration-300 ease-in-out"

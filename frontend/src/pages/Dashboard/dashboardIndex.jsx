@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import AlertComponent from "../../components/SweetAlert/AlertComponent";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -15,9 +16,13 @@ const Dashboard = () => {
         );
         setUser(response.data);
       } catch (error) {
-        console.error(error);
-        alert("Anda belum login");
-        window.location.href = "/login";
+        AlertComponent.error(
+          "Anda belum login!",
+          error.response?.data?.message || "Login terlebih dahulu!"
+        );
+        setTimeout(() => {
+          window.location.href = error.response?.data?.redirect;
+        }, 1500);
       }
     };
     fetchUser();
@@ -34,7 +39,13 @@ const Dashboard = () => {
       );
       window.location.href = "/login";
     } catch (error) {
-      console.error(error);
+      AlertComponent.error(
+        "Anda belum login!",
+        error.response?.data?.message || "Login terlebih dahulu!"
+      );
+      setTimeout(() => {
+        window.location.href = error.response?.data?.redirect;
+      }, 1500);
     }
   };
 

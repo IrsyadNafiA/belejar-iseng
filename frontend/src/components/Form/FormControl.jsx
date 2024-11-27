@@ -1,29 +1,53 @@
 import PropTypes from "prop-types";
 
-const FormControlInput = (props) => {
+const FormControlInput = ({ label, type, options, formik }) => {
   return (
     <div className="mb-4">
       <label
-        htmlFor={props.label}
+        htmlFor={label}
         className="block text-white font-bold mb-2 capitalize"
       >
-        {props.label}
+        {label}
       </label>
-      <input
-        type={props.type}
-        id={props.label}
-        name={props.label}
-        onChange={props.onChange}
-        className="w-full p-2 bg-gray-800 text-white rounded"
-      />
+      {type === "select" ? (
+        <select
+          name={label}
+          id={label}
+          onChange={formik.handleChange} // Gunakan Formik handleChange
+          onBlur={formik.handleBlur} // Tambahkan Formik handleBlur
+          value={formik.values[label]} // Nilai dari Formik state
+          className="w-full p-2 bg-gray-800 text-white rounded capitalize"
+        >
+          <option value="">Select</option>
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          id={label}
+          name={label}
+          onChange={formik.handleChange} // Gunakan Formik handleChange
+          onBlur={formik.handleBlur} // Tambahkan Formik handleBlur
+          value={formik.values[label]} // Nilai dari Formik state
+          className="w-full p-2 bg-gray-800 text-white rounded"
+        />
+      )}
+      {formik.errors[label] && formik.touched[label] && (
+        <div className="text-red-500 mb-2">{formik.errors[label]}</div>
+      )}
     </div>
   );
 };
 
 FormControlInput.propTypes = {
-  label: PropTypes.string,
-  type: PropTypes.string,
-  onChange: PropTypes.func,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  options: PropTypes.array,
+  formik: PropTypes.object.isRequired, // Tambahkan formik sebagai prop
 };
 
 export { FormControlInput };
