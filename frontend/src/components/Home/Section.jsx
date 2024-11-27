@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Header3 } from "./Header";
 
 const HomeSection = (props) => {
@@ -7,6 +8,11 @@ const HomeSection = (props) => {
       {props.children}
     </div>
   );
+};
+
+HomeSection.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default HomeSection;
