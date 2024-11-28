@@ -5,9 +5,11 @@ import { Outlet } from "react-router-dom";
 const Layout = () => {
   return (
     <React.Fragment>
-      <Sidebar />
-      <div className="content">
-        <Outlet />
+      <div className="flex w-full">
+        <Sidebar />
+        <div className="content w-full p-4">
+          <Outlet />
+        </div>
       </div>
     </React.Fragment>
   );

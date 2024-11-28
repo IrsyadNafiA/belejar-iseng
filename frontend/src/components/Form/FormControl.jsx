@@ -25,6 +25,19 @@ const FormControlInput = ({ label, type, options, formik }) => {
             </option>
           ))}
         </select>
+      ) : type === "file" ? (
+        <input
+          type={type}
+          id={label}
+          name={label}
+          onChange={(event) => {
+            const file = event.currentTarget.files[0];
+            formik.setFieldValue("image", file);
+          }}
+          onBlur={formik.handleBlur}
+          className="w-full p-2 bg-gray-800 text-white rounded"
+          placeholder={`Enter product ${label}`}
+        />
       ) : (
         <input
           type={type}
@@ -32,8 +45,9 @@ const FormControlInput = ({ label, type, options, formik }) => {
           name={label}
           onChange={formik.handleChange} // Gunakan Formik handleChange
           onBlur={formik.handleBlur} // Tambahkan Formik handleBlur
-          value={formik.values[label]} // Nilai dari Formik state
+          value={formik.values[label] || ""} // Nilai dari Formik state
           className="w-full p-2 bg-gray-800 text-white rounded"
+          placeholder={`Enter product ${label}`}
         />
       )}
       {formik.errors[label] && formik.touched[label] && (
