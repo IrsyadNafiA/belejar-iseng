@@ -83,4 +83,12 @@ export const createProductValidationSchema = {
       errorMessage: "Type must be a string",
     },
   },
+  // image: {
+  //   notEmpty: {
+  //     errorMessage: "Image must be not empty",
+  //   },
+  //   isString: {
+  //     errorMessage: "Image must be a string",
+  //   },
+  // },
 };

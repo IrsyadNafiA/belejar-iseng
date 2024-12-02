@@ -7,12 +7,15 @@ const createProduct = async (request, response) => {
   if (!result.isEmpty()) return response.status(400).send(result.array());
 
   const data = matchedData(request);
+  if (!request.file)
+    return response.status(400).send({ message: "Masukkan gambar!" });
+  data.image = request.file.path;
   const newProduct = new Product(data);
   try {
     const savedProduct = await newProduct.save();
     return response.status(201).send(savedProduct);
   } catch (err) {
-    return response.sendStatus(400);
+    return response.status(400).send({ message: "Failed to save product" });
   }
 };
 

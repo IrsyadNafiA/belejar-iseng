@@ -9,6 +9,7 @@ import {
   updateProduct,
 } from "../controller/product/product-controller.mjs";
 import { isAuthenticated } from "../middleware/authMiddleware.mjs";
+import imageUpload from "../middleware/uploadMiddleware.mjs";
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.get("/api/product", getProducts);
 router.get("/api/product/:id", getProductById);
 router.post(
   "/api/product",
+  imageUpload.single("image"),
   checkSchema(createProductValidationSchema),
   createProduct
 );
